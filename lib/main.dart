@@ -1,5 +1,5 @@
 import 'package:all_booked/Routes/routes.dart';
-import 'package:all_booked/ViewModel/bloc/daily_chapter_bloc.dart';
+import 'package:all_booked/ViewModel/bloc_daily_chapters/daily_chapter_bloc.dart';
 import 'package:all_booked/ViewModel/bloc_reading_target/reading_target_bloc.dart';
 import 'package:all_booked/ViewModel/cubit/google_auth_cubit.dart';
 import 'package:all_booked/database/bible_database.dart';

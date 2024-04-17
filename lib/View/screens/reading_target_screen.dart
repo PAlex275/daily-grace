@@ -17,11 +17,28 @@ class _ReadingTargetScreenState extends State<ReadingTargetScreen> {
   int selectedFrequency = 1;
   int dailyChaptersNeeded = 4;
 
+  @override
+  void initState() {
+    _loadSharedPreferences();
+    super.initState();
+  }
+
   void _updateSelectedFrequency(int frequency) {
     setState(() {
       selectedFrequency = frequency;
       // Calculăm numărul de capitole zilnice necesare
       dailyChaptersNeeded = (frequency * 1189 / 365).ceil();
+    });
+  }
+
+  void _loadSharedPreferences() async {
+    final int? targetReading =
+        await SharedPreferencesManager.getReadingTarget();
+    final int? chaptersNeeded =
+        await SharedPreferencesManager.getDailyChaptersNeeded();
+    setState(() {
+      selectedFrequency = targetReading ?? 1;
+      dailyChaptersNeeded = chaptersNeeded ?? 4;
     });
   }
 

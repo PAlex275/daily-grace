@@ -1,6 +1,6 @@
 import 'package:all_booked/Model/chapter.dart';
-import 'package:all_booked/ViewModel/bloc/daily_chapter_event.dart';
-import 'package:all_booked/ViewModel/bloc/daily_chapter_state.dart';
+import 'package:all_booked/ViewModel/bloc_daily_chapters/daily_chapter_event.dart';
+import 'package:all_booked/ViewModel/bloc_daily_chapters/daily_chapter_state.dart';
 import 'package:all_booked/database/bible_database.dart';
 import 'package:all_booked/database/shared.dart';
 import 'package:bloc/bloc.dart';

@@ -1,8 +1,10 @@
 import 'package:all_booked/View/screens/daily_chapters_screen.dart';
 import 'package:all_booked/View/screens/home_screen.dart';
 import 'package:all_booked/View/screens/login_screen.dart';
+import 'package:all_booked/View/screens/profile_screen.dart';
 import 'package:all_booked/View/screens/reading_target_screen.dart';
 import 'package:all_booked/View/screens/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,6 +43,13 @@ final GoRouter router = GoRouter(
       path: ReadingTargetScreen.routeName,
       builder: (BuildContext context, GoRouterState state) {
         return const ReadingTargetScreen();
+      },
+    ),
+    GoRoute(
+      path: ProfileScreen.routeName,
+      builder: (BuildContext context, GoRouterState state) {
+        final User? user = FirebaseAuth.instance.currentUser;
+        return ProfileScreen(user: user!);
       },
     ),
   ],

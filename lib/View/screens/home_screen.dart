@@ -1,4 +1,5 @@
 import 'package:all_booked/View/screens/login_screen.dart';
+import 'package:all_booked/View/screens/profile_screen.dart';
 import 'package:all_booked/database/shared.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  List<DateTime> _readingDays =
-      []; // Lista pentru a stoca zilele in care s-a citit
+  List<DateTime> _readingDays = [];
 
   @override
   void initState() {
@@ -61,6 +61,19 @@ class _HomeScreenState extends State<HomeScreen> {
           isSmall: true,
           height: 100,
           width: 100,
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.account_circle, // Icon pentru utilizator
+            size: 30,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () {
+            context.go(
+              ProfileScreen.routeName,
+              extra: {'user': FirebaseAuth.instance.currentUser},
+            );
+          },
         ),
         actions: [
           IconButton(
