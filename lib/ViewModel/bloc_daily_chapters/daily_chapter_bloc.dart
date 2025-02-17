@@ -19,7 +19,6 @@ class DailyChapterBloc extends Bloc<DailyChapterEvent, DailyChapterState> {
         SharedPreferencesManager.getLastGeneratedDate();
 
     if (lastGeneratedDate != null) {
-      // Verificăm dacă data ultimei generări este aceeași cu data curentă
       return lastGeneratedDate.year == now.year &&
           lastGeneratedDate.month == now.month &&
           lastGeneratedDate.day == now.day;
@@ -33,22 +32,26 @@ class DailyChapterBloc extends Bloc<DailyChapterEvent, DailyChapterState> {
     emit(DailyChapterLoading());
     try {
       List<Chapter> dailyChapters;
-
       final storedChapters = await SharedPreferencesManager.getStoredChapters();
       final isChapterGeneratedForToday = await _isChapterGeneratedForToday();
 
-      if (isChapterGeneratedForToday &&
-          storedChapters != null &&
-          storedChapters.isNotEmpty) {
-        // Utilizează capitolele stocate doar dacă au fost generate în ziua respectivă
+      if (isChapterGeneratedForToday && storedChapters != null) {
         dailyChapters = storedChapters;
       } else {
-        // Dacă nu există capitole stocate pentru ziua respectivă, generează-le și salvează-le în SharedPreferences
         dailyChapters =
             await _bibleDatabase.getDailyChapters(event.numberOfChapters);
         await SharedPreferencesManager.setStoredChapters(dailyChapters);
         await SharedPreferencesManager.setLastGeneratedDate(DateTime.now());
       }
+
+      // Incrementăm numărul total de capitole citite
+      final int currentTotalRead =
+          SharedPreferencesManager.getTotalChaptersRead();
+      await SharedPreferencesManager.setTotalChaptersRead(
+          currentTotalRead + dailyChapters.length);
+
+      // Salvăm în Firebase folosind noua funcție
+      // await FirebaseSyncManager.saveDailyChaptersToFirebase(dailyChapters); // Comentat pentru a preveni salvarea automată
 
       emit(DailyChapterLoaded(dailyChapters));
     } catch (e) {

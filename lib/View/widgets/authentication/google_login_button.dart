@@ -4,21 +4,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ElevatedButton googleLoginButton(GoogleAuthState state, BuildContext context) {
+  // Obținem tema curentă
+  final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
   return ElevatedButton(
     style: ButtonStyle(
-        padding: MaterialStateProperty.resolveWith(
+        padding: WidgetStateProperty.resolveWith(
             (states) => const EdgeInsets.only(left: 15)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(8.0),
         )),
-        elevation: MaterialStateProperty.resolveWith((states) => 0.3),
-        backgroundColor: MaterialStateColor.resolveWith(
-          (states) => Colors.white,
-        )),
+        elevation: WidgetStateProperty.resolveWith((states) => 0.5),
+        backgroundColor: WidgetStateProperty.resolveWith(
+          (states) => isDarkMode ? Colors.grey[800] : Colors.white,
+        ),
+        // Adăugăm border pentru contrast mai bun
+        side: WidgetStateProperty.resolveWith((states) => BorderSide(
+            color: isDarkMode ? Colors.grey[600]! : Colors.grey[300]!))),
     onPressed: state is GoogleAuthLoadingState
         ? null
-        : () => context.read<GoogleAuthCubit>().login(),
+        : () => context.read<GoogleAuthCubit>().login(context),
     child: state is GoogleAuthLoadingState
         ? const Padding(
             padding: EdgeInsets.all(2.0),
@@ -34,14 +40,15 @@ ElevatedButton googleLoginButton(GoogleAuthState state, BuildContext context) {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 20,
               ),
               Text(
                 'Login With Google',
                 style: GoogleFonts.robotoSerif(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  // Adaptăm culoarea textului la temă
+                  color: isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
             ],

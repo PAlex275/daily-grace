@@ -1,5 +1,3 @@
-import 'package:all_booked/Model/chapter.dart';
-
 abstract class DailyChapterEvent {}
 
 class LoadDailyChapters extends DailyChapterEvent {
@@ -11,9 +9,7 @@ class LoadDailyChapters extends DailyChapterEvent {
 }
 
 class LoadStoredChapters extends DailyChapterEvent {
-  final List<Chapter> storedChapters;
+  LoadStoredChapters();
 
-  LoadStoredChapters(this.storedChapters);
-
-  List<Object> get props => [storedChapters];
+  List<Object> get props => [];
 }

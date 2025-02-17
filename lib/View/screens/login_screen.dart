@@ -13,8 +13,10 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          isDarkMode ? Theme.of(context).colorScheme.surface : Colors.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -25,9 +27,16 @@ class LoginScreen extends StatelessWidget {
             const Spacer(
               flex: 1,
             ),
-            logo(),
+            Theme(
+              data: Theme.of(context).copyWith(
+                iconTheme: IconThemeData(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              child: logo(),
+            ),
             const SizedBox(
-              height: 30,
+              height: 100,
             ),
             BlocConsumer<GoogleAuthCubit, GoogleAuthState>(
               listener: (context, state) {
@@ -41,6 +50,14 @@ class LoginScreen extends StatelessWidget {
                   width: 250,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).shadowColor.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: googleLoginButton(state, context),
                 );
@@ -49,11 +66,6 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-                onPressed: () {
-                  context.replace(ReadingTargetScreen.routeName);
-                },
-                child: const Text('Anonimous')),
             const Spacer(
               flex: 2,
             ),

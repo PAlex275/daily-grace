@@ -11,12 +11,13 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     init(GoRouter.of(context));
-    return const Scaffold(
-      backgroundColor: Colors.white,
+    return Scaffold(
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
       body: Center(
         child: Image(
-          image: AssetImage('assets/images/dailygrace.png'),
+          image: AssetImage('assets/images/daily_grace.png'),
         ),
       ),
     );

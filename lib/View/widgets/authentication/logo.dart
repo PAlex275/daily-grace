@@ -9,17 +9,19 @@ Widget logo({
     return SizedBox(
       height: height,
       width: width,
-      child: const Image(
+      child: Image(
         fit: BoxFit.fill,
-        image: AssetImage('assets/images/dailygracesmall.png'),
+        image: AssetImage('assets/images/icon.png'),
       ),
     );
   } else {
     return SizedBox(
       width: width,
       height: height,
-      child: const Image(
-        image: AssetImage('assets/images/dailygrace.png'),
+      child: Image(
+        image: AssetImage(
+          'assets/images/daily_grace.png',
+        ),
       ),
     );
   }

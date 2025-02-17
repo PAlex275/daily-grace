@@ -7,6 +7,7 @@ class SharedPreferencesManager {
   static const String dailyChaptersKey = 'daily_chapters';
   static const String storedChaptersKey = 'stored_chapters';
   static const String readDaysKey = 'read_days';
+  static const String totalChaptersReadKey = 'total_chapters_read';
 
   static late SharedPreferences _prefs;
 
@@ -81,5 +82,20 @@ class SharedPreferencesManager {
       return DateTime.parse(dateString);
     }).toList();
     return readDays;
+  }
+
+  // Setează numărul total de capitole citite
+  static Future<void> setTotalChaptersRead(int chaptersRead) async {
+    await _prefs.setInt(totalChaptersReadKey, chaptersRead);
+  }
+
+// Obține numărul total de capitole citite
+  static int getTotalChaptersRead() {
+    return _prefs.getInt(totalChaptersReadKey) ?? 0;
+  }
+
+  static Future<void> clearAll() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 }

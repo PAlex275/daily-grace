@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:all_booked/Model/chapter.dart';
 import 'package:all_booked/Model/verset.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -37,9 +37,13 @@ class BibleDatabase {
     try {
       String path = join(await getDatabasesPath(), 'bible_database.db');
       await deleteDatabase(path);
-      print('Database deleted successfully');
+      if (kDebugMode) {
+        print('Database deleted successfully');
+      }
     } catch (e) {
-      print('Error deleting database: $e');
+      if (kDebugMode) {
+        print('Error deleting database: $e');
+      }
     }
   }
 
@@ -75,9 +79,9 @@ class BibleDatabase {
 
       // Inserează datele din fișierul JSON în baza de date
       Batch batch = db.batch();
-      verses.forEach((verse) {
+      for (var verse in verses) {
         batch.insert('bible_verses', verse);
-      });
+      }
       await batch.commit();
     });
   }
@@ -183,6 +187,97 @@ class BibleDatabase {
     return dailyChapters;
   }
 
+  Future<Map<String, int>> getBookAndChapterFromTotalRead(
+      int totalChaptersRead) async {
+    // Definirea numărului total de capitole pentru fiecare carte
+    final List<int> chaptersInBooks = [
+      50, // Geneza
+      40, // Exodul
+      27, // Leviticul
+      24, // Numeri
+      36, // Deuteronom
+      21, // Iosua
+      24, // Judecători
+      1, // Rut
+      31, // 1 Samuel
+      31, // 2 Samuel
+      22, // 1 Împărați
+      25, // 2 Împărați
+      21, // 1 Cronici
+      29, // 2 Cronici
+      10, // Ezra
+      14, // Neemia
+      10, // Estera
+      150, // Psalmii
+      31, // Proverbe
+      12, // Eclesiastul
+      8, // Cântarea Cântărilor
+      66, // Isaia
+      52, // Ieremia
+      5, // Plângerile lui Ieremia
+      48, // Ezechiel
+      12, // Daniel
+      12, // Osea
+      14, // Ioel
+      9, // Amos
+      9, // Obadia
+      4, // Iona
+      3, // Naum
+      3, // Habacuc
+      2, // Sofonia
+      3, // Agheu
+      2, // Zaharia
+      4, // Maleahi
+      28, // Matei
+      16, // Marcu
+      24, // Luca
+      21, // Ioan
+      28, // Faptele Apostolilor
+      16, // Romani
+      13, // 1 Corinteni
+      13, // 2 Corinteni
+      6, // Galateni
+      4, // Efeseni
+      6, // Filipeni
+      5, // Coloseni
+      5, // 1 Tesaloniceni
+      3, // 2 Tesaloniceni
+      4, // 1 Timotei
+      4, // 2 Timotei
+      3, // Tit
+      1, // Filimon
+      13, // Evrei
+      5, // Iacov
+      5, // 1 Petru
+      5, // 2 Petru
+      5, // 1 Ioan
+      1, // 2 Ioan
+      1, // 3 Ioan
+      1, // Iuda
+      22, // Apocalipsa
+    ];
+
+    int currentBook = 0;
+    int currentChapter = 0;
+
+    // Calculăm cartea și capitolul pe baza numărului total de capitole citite
+    for (int chapters in chaptersInBooks) {
+      if (totalChaptersRead <= chapters) {
+        currentChapter = totalChaptersRead; // Capitolul curent
+        break;
+      }
+      totalChaptersRead -= chapters; // Scădem capitolele din total
+      currentBook++; // Trecem la următoarea carte
+    }
+
+    // Returnăm un map cu numărul cărții și capitolului
+    return {
+      'book': currentBook +
+          1, // Adăugăm 1 pentru a obține indexul cărții (1-indexat)
+      'chapter': currentChapter,
+    };
+  }
+
   // Future<List<Verset>> getVersesInChapterRange(
   //     int startChapter, int endChapter) async {
   //   final db = await database;
@@ -237,4 +332,9 @@ class BibleDatabase {
 
   //   return verses;
   // }
+
+  Future<void> clearAllData() async {
+    final db = await database;
+    await db.delete('daily_progress'); // Șterge progresul zilnic
+  }
 }

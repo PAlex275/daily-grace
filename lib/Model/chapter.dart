@@ -15,7 +15,7 @@ class Chapter {
 
   Map<String, dynamic> toJson() {
     return {
-      'book_name': bookName, // Modificăm numele câmpurilor
+      'book_name': bookName,
       'book_number': bookNumber,
       'chapter': chapterNumber,
       'verses': verses.map((verse) => verse.toJson()).toList(),
@@ -23,7 +23,7 @@ class Chapter {
   }
 
   factory Chapter.fromJson(Map<String, dynamic> json) {
-    final String bookName = json['book_name']; // Modificăm numele câmpurilor
+    final String bookName = json['book_name'];
     final int chapterNumber = json['chapter'];
     final int bookNumber = json['book_number'];
     final List<dynamic> versesJson = json['verses'];

@@ -15,3 +15,8 @@ class SetTargetReading extends ReadingTargetEvent {
   @override
   List<Object?> get props => [targetReading];
 }
+
+class InitializeReadingTarget extends ReadingTargetEvent {
+  @override
+  List<Object?> get props => [];
+}
